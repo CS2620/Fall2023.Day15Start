@@ -1,3 +1,6 @@
+def close_to(one, two):
+  return one[0] - two[0] + one[1] - two[1] + one[2] - two[2] < .01
+
 def rgb_to_hsv(r, g, b):
   """
   Given r,g,b in [0,255], find the h,s,v
@@ -124,6 +127,10 @@ assert  rgb == (0, 100, 255)
 #Blue rotated toward red
 temp = rgb_to_hsv(100, 0, 255)
 assert hsv_to_rgb(*temp) == (100, 0, 255)
+
+# Random colors, compared to GIMP conversion
+temp = rgb_to_hsv(6, 29, 35)
+assert close_to(temp, (.534, .82, .137))
 
 
 

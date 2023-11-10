@@ -2,6 +2,7 @@ import math
 
 from color_conversion import rgb_to_cmyk
 from color_conversion import rgb_to_hsv
+from color_conversion import hsv_to_rgb
 
 
 
@@ -424,9 +425,12 @@ class Layer:
 
         for y in range(self.height):
             for x in range(self.width):
+                if x ==  417 and y == 379:
+                    pass
                 pixel = self.get_pixel(x,y)
                 hsv = rgb_to_hsv(*pixel)
-                layer.set_pixel_one(x, y, (hsv[0],hsv[0],hsv[0]))
+                rgb = hsv_to_rgb(hsv[0], 1, 1)
+                layer.set_pixel(x, y, rgb)
         return layer
 
     def saturation_channel(self):
