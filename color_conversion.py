@@ -1,12 +1,24 @@
 def rgb_to_hsv(r, g, b):
+  """
+  Given r,g,b in [0,255], find the h,s,v
+  in [0,1]
+  """
+  r = r/255
+  g = g/255
+  b = b/255
+
   v = max(r,g,b)
   n = min(r,g,b)
+
+  if v == n:
+    return (0, 0, v)
+
   d = 0
   if (g > r > b) or (b > r > g):
     d = r
   elif (r > g > b) or (b > g > r):
     d = g
-  else
+  else:
     d = b
 
   s = (v - n)/v
@@ -20,7 +32,7 @@ def rgb_to_hsv(r, g, b):
   elif v == g:
     base_angle = 120
     offset_angle = (b-r)/(v-n)*60
-  else if v == b:
+  elif v == b:
     base_angle = 240
     offset_angle = (r-g)/(v-n)*60
 
@@ -32,6 +44,82 @@ def rgb_to_hsv(r, g, b):
   h = final_angle
   
   return (h/360, s, v)
+
+def hsv_to_rgb(h,s,v):
+  """
+  Given h,s,v in [0,1], get 
+  r,g,b in [0,255]
+  """
+
+  r = -1
+  g = -1
+  b = -1
+
+  n = (1-s)*v
+  
+
+  diff_r = h - 0
+  if 1 - h < h - 0:
+    diff_r = 1 - h
+  diff_g = 1/3 - h 
+  diff_b = 2/3 - h 
+
+  if diff_r < diff_g and diff_r < diff_g:
+    r = v
+    if  h > 5/6: # we are rotated toward blue (negative)
+      g = n
+      b = 6*h*(n-v)+n
+    else: # we are rotated toward green (positive)
+      b = n
+      g = 6*h*v-6*h*n+n
+  elif diff_g > diff_r and diff_g > diff_b:
+    g = v
+    if h < 1/3: # we are rotated toward red (negative)
+      b = n
+      r = 6*h*(n-v)+n
+    else: # we are rotated toward blue (positive)
+      r = n
+      b = 6*h*v-6*h*n+n
+  else:
+    b = v
+    if b < 2/3: # we are rotated toward green (negative)
+      r = n
+      g = 6*h*(n-v)+n
+    else: #we are rotated toward red (positive)
+      g = n
+      r=6*h*v-6*h*n+n
+
+  return (int(r*255+.5), int(g*255+.5), int(b*255+.5))
+
+assert rgb_to_hsv(255, 0, 0) == (0, 1, 1)
+assert rgb_to_hsv(0, 255, 0) == (1/3, 1, 1)
+assert rgb_to_hsv(0, 0, 255) == (2/3, 1, 1)
+assert rgb_to_hsv(0, 0, 0) == (0, 0, 0)
+assert rgb_to_hsv(255, 255, 255) == (0, 0, 1)
+assert rgb_to_hsv(128, 128, 128) == (0, 0, 128/255)
+
+#Red rotated toward blue
+temp = rgb_to_hsv(255, 0, 100)
+assert hsv_to_rgb(*temp) == (255, 100, 100)
+#Red rotated toward green
+temp = rgb_to_hsv(255, 100, 0)
+assert hsv_to_rgb(*temp) == (255, 100, 0)
+
+
+#Red rotated toward blue
+temp = rgb_to_hsv(255, 0, 100)
+assert hsv_to_rgb(*temp) == (255, 100, 100)
+#Red rotated toward green
+temp = rgb_to_hsv(255, 100, 0)
+assert hsv_to_rgb(*temp) == (255, 100, 0)
+
+
+temp = rgb_to_hsv(0, 255, 100)
+assert hsv_to_rgb(*temp) == (0, 255, 100)
+temp = rgb_to_hsv(255, 100, 0)
+assert hsv_to_rgb(*temp) == (255, 100, 0)
+
+
 
 def rgb_to_cmyk(r, g, b):
   _r, _g, _b = r/255, g/255, b/255

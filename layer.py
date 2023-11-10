@@ -1,6 +1,7 @@
 import math
 
 from color_conversion import rgb_to_cmyk
+from color_conversion import rgb_to_hsv
 
 
 
@@ -299,9 +300,25 @@ class Layer:
             return
 
         new_color = (
-            min(255, max(0, color[0]))//1,
-            min(255, max(0, color[1]))//1,
-            min(255, max(0, color[2]))//1)
+            int(min(255, max(0, color[0]))),
+            int(min(255, max(0, color[1]))),
+            int(min(255, max(0, color[2]))))
+        self.pixels[y*self.width+x] = new_color
+
+
+    def set_pixel_one(self, x, y, color) -> None:
+        """
+        Set a pixel in the layer buffer. This function
+        expects values between 0 and 1.
+        """
+        if x < 0 or x >= self.width or y < 0 or y >= self.height:
+            print("Bad set_pixel coordinate.")
+            return
+
+        new_color = (
+           int(min(255, max(0, color[0]*255))),
+           int(min(255, max(0, color[1]*255))),
+           int(min(255, max(0, color[2]*255))))
         self.pixels[y*self.width+x] = new_color
 
     def get_pixel(self, x: int, y: int):
@@ -399,5 +416,36 @@ class Layer:
                 pixel = self.get_pixel(x,y)
                 cmyk = rgb_to_cmyk(*pixel)
                 layer.set_pixel(x, y, (cmyk[3],cmyk[3],cmyk[3]))
+
+        return layer
+
+    def hue_channel(self):
+        layer = Layer(self.width, self.height, 0, 0)
+
+        for y in range(self.height):
+            for x in range(self.width):
+                pixel = self.get_pixel(x,y)
+                hsv = rgb_to_hsv(*pixel)
+                layer.set_pixel_one(x, y, (hsv[0],hsv[0],hsv[0]))
+        return layer
+
+    def saturation_channel(self):
+        layer = Layer(self.width, self.height, 0, 0)
+
+        for y in range(self.height):
+            for x in range(self.width):
+                pixel = self.get_pixel(x,y)
+                hsv = rgb_to_hsv(*pixel)
+                layer.set_pixel_one(x, y, (hsv[1],hsv[1],hsv[1]))
+        return layer
+
+    def value_channel(self):
+        layer = Layer(self.width, self.height, 0, 0)
+
+        for y in range(self.height):
+            for x in range(self.width):
+                pixel = self.get_pixel(x,y)
+                hsv = rgb_to_hsv(*pixel)
+                layer.set_pixel_one(x, y, (hsv[2],hsv[2],hsv[2]))
 
         return layer

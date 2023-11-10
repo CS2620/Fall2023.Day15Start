@@ -15,6 +15,27 @@ def one():
     file = "leather.jpg"
 
     container = get_layer_from_file("./images/" + file)
+    container.add_layer(container.layers[0].hue_channel())
+    container.pack()
+    container.save("done_" + file + "_h.png")
+
+    container = get_layer_from_file("./images/" + file)
+    container.add_layer(container.layers[0].saturation_channel())
+    container.pack()
+    container.save("done_" + file + "_s.png")
+
+
+    container = get_layer_from_file("./images/" + file)
+    container.add_layer(container.layers[0].value_channel())
+    container.pack()
+    container.save("done_" + file + "_v.png")
+
+
+
+def one_cmyk():
+    file = "leather.jpg"
+
+    container = get_layer_from_file("./images/" + file)
     container.add_layer(container.layers[0].cyan_channel())
     container.pack()
     container.save("done_" + file + "_c.png")
