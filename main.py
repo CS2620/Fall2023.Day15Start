@@ -11,7 +11,7 @@ import os
 
 
 
-def one():
+def one_adjust():
     file = "leather.jpg"
 
     container = get_layer_from_file("./images/" + file)
@@ -30,7 +30,7 @@ def one():
     container.pack()
     container.save("done_" + file + "_v_adjusted.png")
 
-def one_hsv():
+def one():
     file = "leather.jpg"
 
     container = get_layer_from_file("./images/" + file)
