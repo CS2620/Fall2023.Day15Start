@@ -15,6 +15,25 @@ def one():
     file = "leather.jpg"
 
     container = get_layer_from_file("./images/" + file)
+    container.add_layer(container.layers[0].alter_hue(0))
+    container.pack()
+    container.save("done_" + file + "_h_adjusted.png")
+
+    container = get_layer_from_file("./images/" + file)
+    container.add_layer(container.layers[0].alter_saturation(-.5))
+    container.pack()
+    container.save("done_" + file + "_s_adjusted.png")
+
+
+    container = get_layer_from_file("./images/" + file)
+    container.add_layer(container.layers[0].alter_value(-.1))
+    container.pack()
+    container.save("done_" + file + "_v_adjusted.png")
+
+def one_hsv():
+    file = "leather.jpg"
+
+    container = get_layer_from_file("./images/" + file)
     container.add_layer(container.layers[0].hue_channel())
     container.pack()
     container.save("done_" + file + "_h.png")

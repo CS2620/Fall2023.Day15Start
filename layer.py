@@ -453,3 +453,50 @@ class Layer:
                 layer.set_pixel_one(x, y, (hsv[2],hsv[2],hsv[2]))
 
         return layer
+    
+
+    def alter_hue(self, amount):
+        layer = Layer(self.width, self.height, 0, 0)
+
+        for y in range(self.height):
+            for x in range(self.width):
+                pixel = self.get_pixel(x,y)
+                hsv = rgb_to_hsv(*pixel)
+                temp_hue = hsv[0]+amount
+                if temp_hue > 1:
+                    temp_hue -= 1
+                if temp_hue < 0:
+                    temp_hue += 1
+                hsv2 = (temp_hue, hsv[1], hsv[2])
+                rgb = hsv_to_rgb(*hsv2)
+                layer.set_pixel(x, y, (rgb[0], rgb[1], rgb[2]))
+
+        return layer
+    
+    def alter_saturation(self, amount):
+        layer = Layer(self.width, self.height, 0, 0)
+
+        for y in range(self.height):
+            for x in range(self.width):
+                pixel = self.get_pixel(x,y)
+                hsv = rgb_to_hsv(*pixel)
+                temp_saturation = min(1, max(0, hsv[1]+amount))
+                hsv2 = (hsv[0], temp_saturation, hsv[2])
+                rgb = hsv_to_rgb(*hsv2)
+                layer.set_pixel(x, y, (rgb[0], rgb[1], rgb[2]))
+
+        return layer
+    
+    def alter_value(self, amount):
+        layer = Layer(self.width, self.height, 0, 0)
+
+        for y in range(self.height):
+            for x in range(self.width):
+                pixel = self.get_pixel(x,y)
+                hsv = rgb_to_hsv(*pixel)
+                temp_value = min(1, max(0, hsv[2]+amount))
+                hsv2 = (hsv[0], hsv[1], temp_value)
+                rgb = hsv_to_rgb(*hsv2)
+                layer.set_pixel(x, y, (rgb[0], rgb[1], rgb[2]))
+
+        return layer
